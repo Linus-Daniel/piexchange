@@ -23,6 +23,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons/faBars";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner";
+import { Link } from "react-router-dom";
 
 function Home() {
   return (
@@ -89,23 +90,23 @@ function Home() {
                 <h1>
                   The First Digital Currency You Can Mine On Your&nbsp; Phone
                 </h1>
-                <p>
+                <p className="text-left font-thin">
                   Start mining Pi cryptocurrency today with our free,
                   energy-light mobile app!{" "}
                 </p>
                 <br />
-                <button>
-                  <a href="/exchange">
+          
+                  <Link className="rounded-sm border-[#fcb349] py-3 px-2 border" to="/exchange">
                     Payment Method
                     <FontAwesomeIcon className="check" icon={faCheck} />
-                  </a>
-                </button>
+                  </Link>
+            
               </div>
               <div className="banner-pic">
                 <img src={piphone} alt="" />
               </div>
             </div>
-            <div className="mid-writeup">
+            <div className="mid-writeup text-lg">
               Mining crypto is hard <br></br>Investing in crypto is risky{" "}
               <br></br>Too many of us are left out of the <br></br>
               cryptocurrency revolution...
@@ -187,19 +188,23 @@ function Home() {
                 </a>
               </div>
             </div>
-            <footer>
+            <footer className="w-full">
               <ul className="linksectone">
-                <li>Pi Whitepaper</li>
-                <li>Support &amp; FAQ</li>
-                <li>Terms of Service</li>
+                <Link className="text-[16px] my-3 text-white" to={""}>Pi Whitepaper</Link>
+                <Link className="text-[16px] my-3 text-white" to={""}>Support &amp; FAQ</Link>
+                <Link className="text-[16px] my-3 text-white" to={""}>Terms of Service</Link>
+                <Link className="text-[16px] my-3 text-white" to={""}>Community Code of Conducts</Link>
+
               </ul>
-              <ul className="linksecttwo">
-                <li>Privacy Policy</li>
-                <li>Developer Terms of Use</li>
-                <li>Pi Trademark</li>
+              <ul className="text-[16px] my-6 linksecttwo">
+                <Link className="text-[16px] my-3 text-white" to={""}>Privacy Policy</Link>
+                <Link className="text-[16px] my-3 text-white" to={""}>Developer Terms of Use</Link>
+                <Link className="text-[16px] my-3 text-white" to={""}>Pi Trademark</Link>
+                <Link className="text-[16px] my-3 text-white" to={""}>Safety  Center </Link>
+
               </ul>
-              <div>
-                <img src={pisign} alt=""></img>
+              <div className="w-1/2">
+                <img src={pisign} alt="" className="w-full object-cover"/>
               </div>
             </footer>
           </div>

@@ -4,9 +4,13 @@ import Spinner from "react-activity/dist/Spinner";
 import "react-activity/dist/Spinner.css";
 import logo from "../assets/pi_logo.png";
 import SweetAlert2 from "react-sweetalert2";
+import { useParams } from "react-router-dom";
+import { exchanges } from "../services/exchange";
 
 function Approved() {
   const [isTimeout, setIsTimeout] = useState(false);
+  const { id } = useParams();
+  const method = exchanges.find((item) => item.id === parseInt(id, 10));
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -16,13 +20,12 @@ function Approved() {
   }, []);
 
   return (
-    <div className=" justify-around bg-gradient-to-tr w-screen flex flex-col items-center  h-screen from-purple-700 to-purple-900 ">
-      <img alt=" logo" src={logo} />
-      <div>
-        <p className="font-bold text-center text-xl text-yellow-500">
-          We have recieved your request. please wait while our team process your
-          verification
-        </p>
+    <div className=" justify-around bg-gradient-to-tr w-screen flex flex-col items-center  h-screen">
+ 
+        <div className="flex">
+        <img alt=" logo" src={logo} />
+          <img src={method.image} alt="exchange_logo" />
+
       </div>
 
       <div>

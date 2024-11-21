@@ -29,7 +29,7 @@ const AppRoutes = () => {
       id: 4,
     },
     {
-      path: "/approved",
+      path: "/approved/:id",
       element: <Approved />,
       id: 5,
     },

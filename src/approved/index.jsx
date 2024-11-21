@@ -1,54 +1,73 @@
-import "./index.css";
-import React, { useEffect, useState } from "react";
-import Spinner from "react-activity/dist/Spinner";
-import "react-activity/dist/Spinner.css";
-import logo from "../assets/pi_logo.png";
-import SweetAlert2 from "react-sweetalert2";
-import { useParams } from "react-router-dom";
-import { exchanges } from "../services/exchange";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { currencies } from "../services/currencies";
+import { useExchange } from "../context/ExchangeContext";
 
-function Approved() {
-  const [isTimeout, setIsTimeout] = useState(false);
-  const { id } = useParams();
-  const method = exchanges.find((item) => item.id === parseInt(id, 10));
+const Approved = () => {
+  const navigate = useNavigate();
+  const { selectedExchange } = useExchange(); // Get the selected exchange from the context
+  const [baseCurrency, setBaseCurrency] = useState(currencies[0]); // Set default base currency as USD
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsTimeout(true);
-    }, 9000); // 30000 milliseconds = 30 seconds
-    return () => clearTimeout(timer); // Cleanup the timer on component unmount
-  }, []);
+  const handleCurrencyClick = (code) => {
+    const selectedCurrency = currencies.find((currency) => currency.code === code);
+    setBaseCurrency(selectedCurrency); // Update base currency when a new one is selected
+    navigate(`/swap/${code}`);
+  };
 
   return (
-    <div className=" justify-around bg-gradient-to-tr w-screen flex flex-col items-center  h-screen">
- 
-        <div className="flex">
-        <img alt=" logo" src={logo} />
-          <img src={method.image} alt="exchange_logo" />
-
-      </div>
-
-      <div>
-        {!isTimeout ? (
-          <div>
-            <Spinner size={30} speed={0.5} />
-          </div>
-        ) : (
-          <div>
-            <SweetAlert2
-              show={true}
-              icon="success"
-              title={"Congratulations"}
-              text="Wallet Linked successfully! "
+    <div className="flex flex-col items-center min-h-screen bg-gray-50 p-4">
+      {/* Header showing base currency and selected exchange details */}
+      <div className="w-full max-w-xl bg-white rounded-lg shadow-md p-6 mb-6">
+        <h1 className="text-2xl font-bold text-center mb-4 text-gray-800">
+          Base Currency: {baseCurrency.name} ({baseCurrency.code})
+        </h1>
+        <div className="flex items-center justify-center">
+          <img
+            src={baseCurrency.image}
+            alt={baseCurrency.name}
+            className="w-12 h-12 mr-4"
+          />
+          <span className="text-xl font-semibold text-gray-700">
+            ${baseCurrency.rate.toFixed(2)} USD
+          </span>
+        </div>
+        {selectedExchange && (
+          <div className="flex flex-col items-center mt-6">
+            <img
+              src={selectedExchange.image}
+              alt={selectedExchange.label}
+              className="w-12 h-12 object-cover rounded-full shadow-md"
             />
-
-            {/* Content to show after 30 seconds if needed */}
-            {/* <p className="text-slate-200">Verification failed. Please check your network and try again.</p> */}
+            <span className="text-lg text-gray-800 mt-2">{selectedExchange.label}</span>
           </div>
         )}
       </div>
+
+      {/* Currency selection grid */}
+      <div className="w-full max-w-xl bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-xl font-bold text-center mb-6 text-gray-800">
+          Select a Currency
+        </h2>
+        <div className="flex flex-col gap-4">
+          {currencies.map((currency) => (
+            <Link
+              key={currency.code}
+              to={`/swap/${currency.code}`}
+              className="bg-slate-100 hover:bg-indigo-200 text-indigo-800 font-semibold py-3 px-5 rounded-md text-center flex items-center"
+              onClick={() => handleCurrencyClick(currency.code)} // Update base currency on click
+            >
+              <img
+                src={currency.image}
+                alt={currency.name}
+                className="w-8 h-8 mr-3" // Adjust image size and margin
+              />
+              {currency.name} ({currency.code})
+            </Link>
+          ))}
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default Approved;

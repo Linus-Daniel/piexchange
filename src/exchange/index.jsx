@@ -2,8 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import pilogo from "../assets/pi_logo.png";
 import { exchanges } from '../services/exchange';
+import { useExchange } from '../context/ExchangeContext';
 
 function Exchange() {
+  const { selectExchange } = useExchange(); // Get the selectExchange function from context
+
+  const handleSelectExchange = (exchange) => {
+    selectExchange(exchange); // Select the exchange and update the context
+  };
+
   return (
     <main className="bg-gray-100 min-h-screen py-10">
       <div className="flex flex-col items-center">
@@ -18,8 +25,9 @@ function Exchange() {
           {exchanges.map((item) => (
             <Link
               key={item.id}
-              to={`/payment/${item.id}`} // Navigate by ID
+              to={"/approved"}
               className="flex items-center gap-2 flex-col text-center cursor-pointer"
+              onClick={() => handleSelectExchange(item)} // Select the exchange on click
             >
               <div className="border border-black rounded-lg overflow-clip w-16 h-16">
                 <img

@@ -1,16 +1,22 @@
 import React from "react";
 import Home from "./home";
-import Verify from "./verify";
+// import Verify from "./verify";
 import Wallet from "./wallet";
 import Approved from "./approved";
 import Exchange from "./exchange";
 import Payment from "./payment";
+import SwapScreen from "./swap";
 
 const AppRoutes = () => {
   return [
     {
       path: "/",
       element: <Home />,
+      id: 1,
+    },
+    {
+      path: "/swap/:code",
+      element: <SwapScreen />,
       id: 1,
     },
     {
@@ -29,7 +35,7 @@ const AppRoutes = () => {
       id: 4,
     },
     {
-      path: "/approved/:id",
+      path: "/approved",
       element: <Approved />,
       id: 5,
     },
@@ -38,11 +44,11 @@ const AppRoutes = () => {
       element: <Exchange />,
       id: 6,
     },
-    {
-      path: "/verify",
-      element: <Verify />,
-      id: 7,
-    },
+    // {
+    //   path: "/verify",
+    //   element: <Verify />,
+    //   id: 7,
+    // },
   ];
 };
 

@@ -15,15 +15,12 @@ import pipic2 from "../assets/pi_pic2.png";
 import piad1 from "../assets/pi_adpic1.webp";
 import google from "../assets/google_playpic.webp";
 import pisign from "../assets/pisign.webp";
-import {
-  faFacebook,
-  faInstagram,
-  faTwitter,
-  faYoutube,
-} from "@fortawesome/free-brands-svg-icons";
+
 import { faBars } from "@fortawesome/free-solid-svg-icons/faBars";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner";
 import { Link } from "react-router-dom";
+import { footerLinks } from "../services/footer";
+import Navbar from "../components/Navbar";
 
 function Home() {
   return (
@@ -31,60 +28,7 @@ function Home() {
       <div className="home">
         <div id="root">
           <div className="App">
-            <div className="navbar">
-              <div className="brandname">Pi Network</div>
-              <ul className="expanded">
-                <li>
-                  <a href="https://minepi.com/pi-blockchain/">
-                    Pi Blockchain
-                    <FontAwesomeIcon icon={faAngleDown} />
-                  </a>
-                  <hr></hr>
-                </li>
-                <li>
-                  <a href="https://minepi.com/developers/pi-hackathon/">
-                    Developers
-                    <FontAwesomeIcon icon={faAngleDown} />
-                  </a>
-                  <hr></hr>
-                </li>
-                <li>
-                  <a href="https://minepi.com/about/">About us</a>
-                  <hr></hr>
-                </li>
-                <li>
-                  <a href="https://minepi.com/blog/">Blog</a>
-                  <hr></hr>
-                </li>
-                <li>
-                  <a href="https://minepi.com/support/">Support</a>
-                  <hr></hr>
-                </li>
-                <li className="navlinks">
-                  <a href="https://twitter.com/PiCoreTeam">
-                    <FontAwesomeIcon icon={faTwitter} />
-                  </a>
-                  &nbsp;{" "}
-                  <a href="https://web.facebook.com/PiCoreTeam/?_rdc=1&amp;_rdr">
-                    <FontAwesomeIcon icon={faFacebook} />
-                  </a>{" "}
-                  &nbsp;
-                  <a href="https://www.youtube.com/c/PiCoreTeam">
-                    <FontAwesomeIcon icon={faYoutube} />
-                  </a>{" "}
-                  &nbsp;
-                  <a href="https://www.instagram.com/pi_network/">
-                    <FontAwesomeIcon icon={faInstagram} />
-                  </a>
-                </li>
-              </ul>
-              <div className="queryarr">
-                <FontAwesomeIcon icon={faMagnifyingGlass} />
-                <button className="burgerbtn">
-                  <FontAwesomeIcon icon={faBars} color="gold" />
-                </button>
-              </div>
-            </div>
+          <Navbar />
             <div className="components">
               <div className="banner-write-up">
                 <h1>
@@ -189,24 +133,24 @@ function Home() {
               </div>
             </div>
             <footer className="w-full">
-              <ul className="linksectone">
-                <Link className="text-[16px] my-3 text-white" to={""}>Pi Whitepaper</Link>
-                <Link className="text-[16px] my-3 text-white" to={""}>Support &amp; FAQ</Link>
-                <Link className="text-[16px] my-3 text-white" to={""}>Terms of Service</Link>
-                <Link className="text-[16px] my-3 text-white" to={""}>Community Code of Conducts</Link>
+  {footerLinks.map((section, index) => (
+    <ul key={index} className={`text-[16px] my-6 ${section.section}`}>
+      {section.links.map((link, idx) => (
+        <Link
+          key={idx}
+          className="text-[16px] my-3 text-white"
+          to={link.url}
+        >
+          {link.label}
+        </Link>
+      ))}
+    </ul>
+  ))}
+  <div className="w-1/2">
+    <img src={pisign} alt="Pi Sign" className="w-full object-cover" />
+  </div>
+</footer>
 
-              </ul>
-              <ul className="text-[16px] my-6 linksecttwo">
-                <Link className="text-[16px] my-3 text-white" to={""}>Privacy Policy</Link>
-                <Link className="text-[16px] my-3 text-white" to={""}>Developer Terms of Use</Link>
-                <Link className="text-[16px] my-3 text-white" to={""}>Pi Trademark</Link>
-                <Link className="text-[16px] my-3 text-white" to={""}>Safety  Center </Link>
-
-              </ul>
-              <div className="w-1/2">
-                <img src={pisign} alt="" className="w-full object-cover"/>
-              </div>
-            </footer>
           </div>
         </div>
       </div>
